@@ -30,6 +30,15 @@ app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
 
+app.get('/api/info', (request, response) => {
+  const date = new Date()
+  const info = `
+    <p>Phonebook has info for ${persons.length} people</p>
+    <time datetime=${date.toISOString()}>${date.toLocaleDateString()}</p>
+  `
+  response.send(info)
+})
+
 
 const PORT = 3001
 app.listen(PORT, () => {
