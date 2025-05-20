@@ -129,11 +129,23 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.get('/api/info', (request, response) => {
   const date = new Date()
-  const info = `
+  Person.find({}).then(persons => {
+    if (!persons) {
+      return response.status(404).json({
+        error: 'no persons found',
+      })
+    }
+    const info = `
     <p>Phonebook has info for ${persons.length} people</p>
     <time datetime=${date.toISOString()}>${date.toLocaleDateString()}</p>
   `
-  response.send(info)
+    response.send(info)
+  }).catch(err => {
+    console.error('Error fetching persons:', err)
+    mongoose.connection.close()
+  })
+  
+  
 })
 
 const errorHandler = (error, request, response, next) => {
